@@ -28,14 +28,13 @@ import static org.assertj.core.api.Assertions.assertThat;
  * @see Flux#publishOn(Scheduler)
  * @see Schedulers
  */
-public class Part11BlockingToReactiveTest {
+class Part11BlockingToReactiveTest {
 
 	Part11BlockingToReactive workshop = new Part11BlockingToReactive();
 
 //========================================================================================
-
 	@Test
-	public void slowPublisherFastSubscriber() {
+	void slowPublisherFastSubscriber() {
 		BlockingUserRepository repository = new BlockingUserRepository();
 		Flux<User> flux = workshop.blockingRepositoryToFlux(repository);
 		assertThat(repository.getCallCount()).isEqualTo(0).withFailMessage("The call to findAll must be deferred until the flux is subscribed");
@@ -45,9 +44,8 @@ public class Part11BlockingToReactiveTest {
 	}
 
 //========================================================================================
-
 	@Test
-	public void fastPublisherSlowSubscriber() {
+	void fastPublisherSlowSubscriber() {
 		ReactiveRepository<User> reactiveRepository = new ReactiveUserRepository();
 		BlockingUserRepository blockingRepository = new BlockingUserRepository(new User[]{});
 		Mono<Void> complete = workshop.fluxToBlockingRepository(reactiveRepository.findAll(), blockingRepository);
