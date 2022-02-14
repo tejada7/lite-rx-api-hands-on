@@ -1,5 +1,7 @@
 package io.pivotal.literx.domain;
 
+import java.util.Objects;
+
 public class User {
 
 	public static final User SKYLER = new User("swhite", "Skyler", "White");
@@ -42,13 +44,13 @@ public class User {
 
 		User user = (User) o;
 
-		if (!username.equals(user.username)) {
+		if (!Objects.equals(username, user.username)) {
 			return false;
 		}
-		if (!firstname.equals(user.firstname)) {
+		if (!Objects.equals(firstname, user.firstname)) {
 			return false;
 		}
-		return lastname.equals(user.lastname);
+		return Objects.equals(lastname, user.lastname);
 
 	}
 
