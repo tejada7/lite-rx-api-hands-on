@@ -1,5 +1,7 @@
 package io.pivotal.literx.domain;
 
+import reactor.util.function.Tuple3;
+
 import java.util.Locale;
 import java.util.Objects;
 
@@ -13,15 +15,19 @@ public class User {
     public static final User SAUL = new User("sgoodman", "Saul", "Goodman");
 
     private final String username;
-
     private final String firstname;
-
     private final String lastname;
 
     public User(String username, String firstname, String lastname) {
         this.username = username;
         this.firstname = firstname;
         this.lastname = lastname;
+    }
+
+    public User(final Tuple3<String, String, String> triple) {
+        username = triple.getT1();
+        firstname = triple.getT2();
+        lastname = triple.getT3();
     }
 
     public String getUsername() {
