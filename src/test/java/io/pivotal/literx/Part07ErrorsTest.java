@@ -29,48 +29,45 @@ import reactor.test.StepVerifier;
  * @author Sebastien Deleuze
  * @see Exceptions#propagate(Throwable)
  */
-public class Part07ErrorsTest {
+class Part07ErrorsTest {
 
-	Part07Errors workshop = new Part07Errors();
+    Part07Errors workshop = new Part07Errors();
 
-//========================================================================================
+    //========================================================================================
+    @Test
+    void monoWithValueInsteadOfError() {
+        Mono<User> mono = workshop.betterCallSaulForBogusMono(Mono.error(new IllegalStateException()));
+        StepVerifier.create(mono)
+                .expectNext(User.SAUL)
+                .verifyComplete();
 
-	@Test
-	public void monoWithValueInsteadOfError() {
-		Mono<User> mono = workshop.betterCallSaulForBogusMono(Mono.error(new IllegalStateException()));
-		StepVerifier.create(mono)
-				.expectNext(User.SAUL)
-				.verifyComplete();
+        mono = workshop.betterCallSaulForBogusMono(Mono.just(User.SKYLER));
+        StepVerifier.create(mono)
+                .expectNext(User.SKYLER)
+                .verifyComplete();
+    }
 
-		mono = workshop.betterCallSaulForBogusMono(Mono.just(User.SKYLER));
-		StepVerifier.create(mono)
-				.expectNext(User.SKYLER)
-				.verifyComplete();
-	}
+    //========================================================================================
+    @Test
+    void fluxWithValueInsteadOfError() {
+        Flux<User> flux = workshop.betterCallSaulAndJesseForBogusFlux(Flux.error(new IllegalStateException()));
+        StepVerifier.create(flux)
+                .expectNext(User.SAUL, User.JESSE)
+                .verifyComplete();
 
-//========================================================================================
+        flux = workshop.betterCallSaulAndJesseForBogusFlux(Flux.just(User.SKYLER, User.WALTER));
+        StepVerifier.create(flux)
+                .expectNext(User.SKYLER, User.WALTER)
+                .verifyComplete();
+    }
 
-	@Test
-	public void fluxWithValueInsteadOfError() {
-		Flux<User> flux = workshop.betterCallSaulAndJesseForBogusFlux(Flux.error(new IllegalStateException()));
-		StepVerifier.create(flux)
-				.expectNext(User.SAUL, User.JESSE)
-				.verifyComplete();
+    //========================================================================================
+    @Test
+    void handleCheckedExceptions() {
+        Flux<User> flux = workshop.capitalizeMany(Flux.just(User.SAUL, User.JESSE));
 
-		flux = workshop.betterCallSaulAndJesseForBogusFlux(Flux.just(User.SKYLER, User.WALTER));
-		StepVerifier.create(flux)
-				.expectNext(User.SKYLER, User.WALTER)
-				.verifyComplete();
-	}
-
-//========================================================================================
-
-	@Test
-	public void handleCheckedExceptions() {
-		Flux<User> flux = workshop.capitalizeMany(Flux.just(User.SAUL, User.JESSE));
-
-		StepVerifier.create(flux)
-				.verifyError(Part07Errors.GetOutOfHereException.class);
-	}
+        StepVerifier.create(flux)
+                .verifyError(Part07Errors.GetOutOfHereException.class);
+    }
 
 }
