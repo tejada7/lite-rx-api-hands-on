@@ -13,15 +13,14 @@ import reactor.test.StepVerifier;
  *
  * @author Sebastien Deleuze
  */
-public class Part04TransformTest {
+class Part04TransformTest {
 
 	Part04Transform workshop = new Part04Transform();
 	ReactiveRepository<User> repository = new ReactiveUserRepository();
 
 //========================================================================================
-
 	@Test
-	public void transformMono() {
+	void transformMono() {
 		Mono<User> mono = repository.findFirst();
 		StepVerifier.create(workshop.capitalizeOne(mono))
 				.expectNext(new User("SWHITE", "SKYLER", "WHITE"))
@@ -29,9 +28,8 @@ public class Part04TransformTest {
 	}
 
 //========================================================================================
-
 	@Test
-	public void transformFlux() {
+	void transformFlux() {
 		Flux<User> flux = repository.findAll();
 		StepVerifier.create(workshop.capitalizeMany(flux))
 				.expectNext(
@@ -43,9 +41,8 @@ public class Part04TransformTest {
 	}
 
 //========================================================================================
-
 	@Test
-	public void  asyncTransformFlux() {
+	void  asyncTransformFlux() {
 		Flux<User> flux = repository.findAll();
 		StepVerifier.create(workshop.asyncCapitalizeMany(flux))
 				.expectNext(
